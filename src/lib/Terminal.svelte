@@ -6,19 +6,21 @@
 		Terminal
 	} from '@battlefieldduck/xterm-svelte';
 
-	let options: ITerminalOptions & ITerminalInitOnlyOptions = {
+	let terminal = $state<Terminal>();
+
+	const options: ITerminalOptions & ITerminalInitOnlyOptions = {
 		fontFamily: 'Consolas'
 	};
 
-	async function onLoad(terminal: Terminal) {
+	async function onLoad() {
 		console.log('Child component has loaded');
 
 		// FitAddon Usage
 		const fitAddon = new (await XtermAddon.FitAddon()).FitAddon();
-		terminal.loadAddon(fitAddon);
+		terminal?.loadAddon(fitAddon);
 		fitAddon.fit();
 
-		terminal.write('Hello World');
+		terminal?.write('Hello World');
 	}
 
 	function onData(data: string) {
@@ -30,4 +32,4 @@
 	}
 </script>
 
-<Xterm {options} {onLoad} {onData} {onKey} />
+<Xterm bind:terminal {options} {onLoad} {onData} {onKey} />
